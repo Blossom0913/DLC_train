@@ -104,13 +104,19 @@ def run_experiment(X_raw, y_raw, batch_size, epochs, device,
     if not include_base: 
         y_raw_exp -= 1
     
-    # Standardize features directly (no windowing)
+    # Split first, then fit scaler on train only to avoid leakage
+    X_train_raw, X_temp_raw, y_train, y_temp = train_test_split(
+        X_raw_exp, y_raw_exp, test_size=0.3, random_state=42, stratify=y_raw_exp
+    )
+    X_val_raw, X_test_raw, y_val, y_test = train_test_split(
+        X_temp_raw, y_temp, test_size=0.5, random_state=42, stratify=y_temp
+    )
+
+    # Standardize features (fit on train only)
     scaler = StandardScaler()
-    X = scaler.fit_transform(X_raw_exp)
-    
-    # Split data using random stratified splitting (70% train, 15% val, 15% test)
-    X_train, X_temp, y_train, y_temp = train_test_split(X, y_raw_exp, test_size=0.3, random_state=42, stratify=y_raw_exp)
-    X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42, stratify=y_temp)
+    X_train = scaler.fit_transform(X_train_raw)
+    X_val = scaler.transform(X_val_raw)
+    X_test = scaler.transform(X_test_raw)
     
     # Create datasets
     train_dataset = MouseDataset(X_train, y_train)
@@ -125,7 +131,7 @@ def run_experiment(X_raw, y_raw, batch_size, epochs, device,
     }
     
     # Model setup
-    model = BehaviorLSTM(input_size=X_raw.shape[1], num_classes=num_classes).to(device)
+    model = BehaviorLSTM(input_size=X_train.shape[1], num_classes=num_classes).to(device)
     classes = np.unique(y_raw_exp)
     class_weights = compute_class_weight('balanced', classes=classes, y=y_raw_exp)
     criterion = nn.CrossEntropyLoss(weight=torch.FloatTensor(class_weights)).to(device)
