@@ -2,6 +2,7 @@
 
 This repository contains code for training, evaluating, and visualizing machine learning models for mouse social behavior classification. It includes CNN, LSTM, GMM, and LightGBM baselines, plus experiment runners, academic-style plots, and utilities for data preparation.
 
+- Video：https://youtu.be/oTXjbmTi8IQ
 - Dataset DOI: https://doi.org/10.6084/m9.figshare.30393298
 - OS/Env: Developed and tested on Windows with Python. Works in VS Code.
 
