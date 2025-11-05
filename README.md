@@ -142,7 +142,7 @@ The `model_comparison_aggression_multiclass.py` script filters out non-aggressio
 
 If you use this code or dataset in academic work, please cite the dataset DOI and this repository:
 
-- Dataset: https://doi.org/10.6084/m9.figshare.30393298
+- Dataset: [https://doi.org/10.6084/m9.figshare.30393298](https://doi.org/10.6084/m9.figshare.30393298.v2)
 - Code: add your preferred software citation (e.g., Zenodo DOI if archived)
 
 Example citation format:
